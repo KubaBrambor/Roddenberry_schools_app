@@ -4,7 +4,7 @@
   "compilerOptions": {
     "strict": true,
     "moduleResolution": "node",
-    "target": "ESNext",
+    "target": "ESNext"
   },
   "include": ["**/*.ts", "**/*.vue", "types/**/*.d.ts"]
 }

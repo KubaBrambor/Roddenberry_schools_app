@@ -1,25 +1,51 @@
 {
-	"name": "nuxt-app",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"build": "nuxt build",
-		"dev": "nuxt dev",
-		"generate": "nuxt generate",
-		"preview": "nuxt preview",
-		"postinstall": "nuxt prepare",
-		"preinstall": "npx only-allow pnpm"
-	},
-	"dependencies": {
-		"maplibre-gl": "^5.2.0",
-		"nuxt": "^3.15.4",
-		"vue": "latest",
-		"vue-router": "latest"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"esbuild"
-		]
-	}
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "packageManager": "pnpm@10.15.0",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev --host 0.0.0.0",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "preinstall": "npx only-allow pnpm",
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "prepare": "cd .. && husky frontend/.husky",
+        "lint-staged": "lint-staged"
+    },
+    "lint-staged": {
+        "**/*.{js,ts,vue}": [
+            "eslint --fix",
+            "prettier -w --"
+        ],
+        "**/*.{css,scss,html,md,json}": [
+            "prettier -w --"
+        ]
+    },
+    "dependencies": {
+        "@nuxt/eslint": "1.5.2",
+        "eslint": "^9.31.0",
+        "maplibre-gl": "^5.2.0",
+        "nuxt": "^3.15.4",
+        "vue": "latest",
+        "vue-router": "latest"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@parcel/watcher",
+            "esbuild"
+        ]
+    },
+    "devDependencies": {
+        "@rollup/rollup-linux-arm64-gnu": "^4.36.0",
+        "eslint-config-prettier": "^10.1.5",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.2",
+        "prettier": "3.6.2",
+        "typescript": "^5.8.3"
+    }
 }

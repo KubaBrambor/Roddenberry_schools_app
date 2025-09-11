@@ -2,7 +2,7 @@
 import { useApi } from "../composables/useApi";
 
 interface BackendResponse {
-  message: string;
+    message: string;
 }
 
 const { data, error, status } = useApi<BackendResponse>("/users");

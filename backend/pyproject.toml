@@ -6,10 +6,43 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi[standard]>=0.115.10",
+    "openpyxl>=3.1.5",
+    "pandas>=2.2.3",
+    "pandas-stubs>=2.2.3.250308",
+    "psycopg2-binary>=2.9.10",
+    "pydantic-settings>=2.8.1",
+    "requests>=2.32.3",
+    "sqlmodel>=0.0.24",
+    "unidecode>=1.4.0",
 ]
 
 [dependency-groups]
 dev = [
+    "basedpyright>=1.28.4",
     "debugpy>=1.8.12",
     "ruff>=0.9.9",
 ]
+
+[tool.ruff.lint]
+select = [
+    "E4",  # pycodestyle (specifically import conventions like E402)
+    "E7",  # pycodestyle errors (comparisons, bare excepts)
+    "E9",  # pycodestyle runtime/syntax errors 
+    "F",   # Pyflakes (undefined names, unused imports/variables, etc.)
+    "B",   # flake8-bugbear (potential bugs and design problems)
+    "I",   # isort (import sorting)
+    "Q",   # flake8-quotes (quote consistency)
+    "ARG", # flake8-unused-arguments (detect unused function arguments)
+    "FAST",# flake8-fastapi (FastAPI specific linting rules)
+    "N",   # pep8-naming (PEP 8 naming conventions)
+    "RUF"  # Ruff-specific rules (built-in rules unique to Ruff)
+]
+
+[tool.basedpyright]
+# using ruff for unused code (ARG rule)
+reportUnusedVariable = "none"
+reportUnusedImport = "none"
+reportUnusedFunction = "none"
+reportUnusedClass = "none"
+reportUnusedExpression = "none"
+reportImportCycles = "none" # using ORMs it is almost impossible to avoid cycles

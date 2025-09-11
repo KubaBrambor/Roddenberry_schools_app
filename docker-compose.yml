@@ -1,0 +1,47 @@
+services:
+  backend:
+    build:
+      context: ./backend # Use the Dockerfile in ./backend to build the backend image
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000" # Expose container port 8000 on host port 8000
+    volumes:
+      # Mount your local backend code into the container for hot‐reload
+      - ./backend:/app/backend
+      # Persist the Python virtualenv here so dependencies survive code mounts
+      - backend-venv:/app/backend/.venv
+    env_file:
+      - ./backend/.env
+    environment:
+      - PYTHONUNBUFFERED=1 # Disable Python output buffering for real‐time logs
+
+  frontend:
+    build:
+      context: ./frontend # Build the frontend image from ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000" # Expose container port 3000 on host port 3000
+    volumes:
+      # Bind-mount your local frontend code for hot reload
+      - ./frontend:/app/frontend
+      # Keep node_modules off the host to avoid permission/OS differences
+      - frontend-node-modules:/app/frontend/node_modules
+      # Keep pnpm store off the host to avoid permission/OS differences
+      - frontend-pnpm-store:/pnpm-store
+    environment:
+      - PNPM_STORE_DIR=/pnpm-store # PNPM store directory
+      # Make file watching robust on Docker Desktop (macOS/Windows)
+      - CHOKIDAR_USEPOLLING=1 # Vite/Chokidar: use polling instead of FS events
+      - CHOKIDAR_INTERVAL=300 # (optional) Poll every 300ms; tweak if CPU is high
+      - NITRO_POLLING=1 # Nuxt Nitro: poll for server-side file changes
+      # Expose API base via Nuxt public runtime config
+      - NUXT_PUBLIC_API_BASE=/api
+      # Internal API base for server-side proxy target (Docker network)
+      - NUXT_INTERNAL_API_BASE=http://backend:8000
+    # Ensure the dev server listens on all interfaces inside the container
+    # so the host port mapping can reach it.
+
+volumes:
+  backend-venv: # Named volume to store Python .venv dependencies
+  frontend-node-modules: # Named volume to store node_modules dependencies
+  frontend-pnpm-store: # Named volume to store pnpm store dependencies

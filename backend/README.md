@@ -9,7 +9,6 @@ Look at the [FastAPI documentation](https://fastapi.tiangolo.com) to learn more.
 ```bash
 # Install dependencies
 uv sync
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
 ### Setup for [pip](https://pip.pypa.io/en/stable/getting-started/) users
@@ -23,16 +22,46 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install .
 ```
 
+## Database Configuration
+
+### PostgreSQL Environment Variables
+
+Set PostgreSQL credentials in `app/core/.env`, format:
+
+```ini
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_SERVER=
+POSTGRES_PORT=
+POSTGRES_DB=
+```
+
 ## Running the Project
 
-You can run backend with `fastapi`:
+### You can run backend with FastAPI
+
+- for pip users
 
 ```bash
 fastapi dev main.py
 ```
 
-Or with `uvicorn` directly:
+- for uv users
+
+```bash
+uv run fastapi dev
+```
+
+### Or with Uvicorn directly
+
+- for pip users
 
 ```bash
 uvicorn main:app --reload
+```
+
+- for uv users
+
+```bash
+uv run uvicorn main:app --reload
 ```
