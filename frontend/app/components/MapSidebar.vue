@@ -26,18 +26,7 @@ const isPublicSchool = (status: string) => {
     return status.toLowerCase().includes("publiczn")
 }
 
-// Helper function to get score color
-const getScoreColor = (score: number) => {
-    if (score >= 75) return "text-green-600"
-    if (score >= 50) return "text-yellow-600"
-    return "text-red-600"
-}
-
-const getScoreBgColor = (score: number) => {
-    if (score >= 75) return "bg-green-100"
-    if (score >= 50) return "bg-yellow-100"
-    return "bg-red-100"
-}
+const { getColor } = useScoreColor()
 
 // Group exam results by year
 const groupResultsByYear = (
@@ -175,32 +164,16 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                             </p>
                             <div class="flex items-baseline">
                                 <span
-                                    :class="[
-                                        'text-3xl font-bold',
-                                        getScoreColor(selectedPoint.score),
-                                    ]">
+                                    :class="'text-3xl font-bold'"
+                                    :style="{
+                                        color: getColor(selectedPoint.score),
+                                    }">
                                     {{ Math.round(selectedPoint.score) }}
                                 </span>
                                 <span class="text-sm text-gray-500 ml-1"
                                     >/ 100</span
                                 >
                             </div>
-                        </div>
-                        <div
-                            :class="[
-                                'w-16 h-16 rounded-full flex items-center justify-center',
-                                getScoreBgColor(selectedPoint.score),
-                            ]">
-                            <svg
-                                :class="[
-                                    'w-8 h-8',
-                                    getScoreColor(selectedPoint.score),
-                                ]"
-                                fill="currentColor"
-                                viewBox="0 0 20 20">
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                            </svg>
                         </div>
                     </div>
                     <!-- Score Bar -->
@@ -209,13 +182,13 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                             <div
                                 :class="[
                                     'h-2 rounded-full transition-all duration-500',
-                                    selectedPoint.score >= 75
-                                        ? 'bg-green-500'
-                                        : selectedPoint.score >= 50
-                                          ? 'bg-yellow-500'
-                                          : 'bg-red-500',
                                 ]"
-                                :style="{ width: `${selectedPoint.score}%` }" />
+                                :style="{
+                                    width: `${selectedPoint.score}%`,
+                                    'background-color': getColor(
+                                        selectedPoint.score,
+                                    ),
+                                }" />
                         </div>
                     </div>
                 </div>
@@ -381,13 +354,12 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                                 v-if="result.zdawalnosc"
                                                 :class="[
                                                     'inline-flex px-2 py-0.5 rounded-full font-medium',
-                                                    result.zdawalnosc >= 90
-                                                        ? 'bg-green-100 text-green-800'
-                                                        : result.zdawalnosc >=
-                                                            70
-                                                          ? 'bg-yellow-100 text-yellow-800'
-                                                          : 'bg-red-100 text-red-800',
-                                                ]">
+                                                ]"
+                                                :style="{
+                                                    color: getColor(
+                                                        result.zdawalnosc,
+                                                    ),
+                                                }">
                                                 {{
                                                     result.zdawalnosc.toFixed(
                                                         0,
