@@ -537,7 +537,13 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 Strona internetowa
                             </p>
                             <a
-                                :href="selectedPoint.strona_internetowa"
+                                :href="
+                                    selectedPoint.strona_internetowa.startsWith(
+                                        'http',
+                                    )
+                                        ? selectedPoint.strona_internetowa
+                                        : `https://${selectedPoint.strona_internetowa}`
+                                "
                                 target="_blank"
                                 class="text-sm text-blue-600 hover:text-blue-800 break-all">
                                 {{ selectedPoint.strona_internetowa }}
