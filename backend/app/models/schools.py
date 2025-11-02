@@ -195,7 +195,7 @@ class SzkolaPublicWithRelations(SzkolaPublic):
     status_publicznoprawny: StatusPublicznoprawnyPublic
     kategoria_uczniow: KategoriaUczniowPublic
     miejscowosc: MiejscowoscPublic
-    ulica: UlicaPublic
+    ulica: UlicaPublic | None
     ksztalcenie_zawodowe: list[KsztalcenieZawodowePublic]
     wyniki_e8: list["WynikE8PublicWithPrzedmiot"]
     wyniki_em: list["WynikEMPublicWithPrzedmiot"]
