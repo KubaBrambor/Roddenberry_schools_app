@@ -51,6 +51,7 @@
         ]
     },
     "devDependencies": {
+        "@iconify-json/mdi": "^1.2.3",
         "@rollup/rollup-linux-arm64-gnu": "^4.36.0",
         "@types/geojson": "^7946.0.16",
         "@vitejs/plugin-vue": "^5.1.4",

@@ -42,6 +42,9 @@ importers:
         specifier: latest
         version: 4.6.2(vue@3.5.22(typescript@5.8.3))
     devDependencies:
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
       '@rollup/rollup-linux-arm64-gnu':
         specifier: ^4.36.0
         version: 4.36.0
@@ -829,6 +832,9 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/mdi@1.2.3':
+    resolution: {integrity: sha512-O3cLwbDOK7NNDf2ihaQOH5F9JglnulNDFV7WprU2dSoZu3h3cWH//h74uQAB87brHmvFVxIOkuBX2sZSzYhScg==}
 
   '@iconify/collections@1.0.614':
     resolution: {integrity: sha512-j+5AM/tcMXicNktY1N6ZfnRH8WrK4NurONe2LejP2eQi6aN7R+IH7tDax+7CJAIf+G25pRxlFOTDv4+X7FmerA==}
@@ -6036,6 +6042,10 @@ snapshots:
   '@humanwhocodes/retry@0.3.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@iconify-json/mdi@1.2.3':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify/collections@1.0.614':
     dependencies:

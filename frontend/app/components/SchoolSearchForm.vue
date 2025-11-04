@@ -112,17 +112,7 @@ const resetForm = () => {
                             type="button"
                             class="text-red-500 hover:text-red-700 transition-colors"
                             @click="emit('clear-voivodeship')">
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12" />
-                            </svg>
+                            <Icon name="mdi:close" class="w-6 h-6" />
                         </button>
                     </div>
                     <div v-else class="text-gray-500 text-center py-2">
