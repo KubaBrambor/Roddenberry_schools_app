@@ -56,7 +56,6 @@ const groupResultsBySubject = (
     return { grouped, years: Array.from(years).sort() }
 }
 
-// Format address
 const formatAddress = (school: SzkolaPublicWithRelations) => {
     const parts = []
     if (school.ulica?.nazwa) parts.push(school.ulica.nazwa)
@@ -78,28 +77,27 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
             isOpen ? 'transform translate-x-0' : 'transform -translate-x-full',
         ]">
         <!-- Sidebar Header -->
-        <div class="sticky top-0 bg-white z-10 border-b border-gray-200">
-            <div class="flex items-center justify-between p-4">
-                <h2 class="text-lg font-semibold text-gray-900">
-                    Szczegóły szkoły
-                </h2>
-                <button
-                    class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-                    aria-label="Zamknij panel"
-                    @click="closeSidebar">
-                    <svg
-                        class="w-5 h-5 text-gray-500"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+        <div
+            class="sticky top-0 bg-white z-10 border-b border-gray-200 flex items-center justify-between p-4">
+            <h2 class="text-lg font-semibold text-gray-900">
+                Szczegóły szkoły
+            </h2>
+            <button
+                class="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Zamknij panel"
+                @click="closeSidebar">
+                <svg
+                    class="w-5 h-5 text-gray-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
 
         <!-- Sidebar Content - Scrollable -->
@@ -113,10 +111,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
                 <div class="flex flex-wrap gap-2 mb-4">
                     <!-- School Type Badge -->
-                    <span
-                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    <span class="badge badge-blue">
                         <svg
-                            class="w-3 h-3 mr-1.5"
+                            class="badge-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -127,17 +124,17 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
                     <!-- Public/Private Status Badge -->
                     <span
+                        class="badge"
                         :class="[
-                            'inline-flex items-center px-3 py-1 rounded-full text-xs font-medium',
                             isPublicSchool(
                                 selectedPoint.status_publicznoprawny?.nazwa ||
                                     '',
                             )
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-purple-100 text-purple-800',
+                                ? 'badge-green'
+                                : 'badge-purple',
                         ]">
                         <svg
-                            class="w-3 h-3 mr-1.5"
+                            class="badge-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -186,17 +183,15 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                         </div>
                     </div>
                     <!-- Score Bar -->
-                    <div class="mt-3">
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                                :class="[
-                                    'h-2 rounded-full transition-all duration-500',
-                                ]"
-                                :style="{
-                                    width: `${selectedPoint.score}%`,
-                                    'background-color': scoreColor,
-                                }" />
-                        </div>
+                    <div class="mt-3 w-full bg-gray-200 rounded-full h-2">
+                        <div
+                            :class="[
+                                'h-2 rounded-full transition-all duration-500',
+                            ]"
+                            :style="{
+                                width: `${selectedPoint.score}%`,
+                                'background-color': scoreColor,
+                            }" />
                     </div>
                 </div>
             </div>
@@ -208,17 +203,13 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     selectedPoint.wyniki_em?.length
                 "
                 class="p-6 border-b">
-                <h4
-                    class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">
-                    Wyniki egzaminów
-                </h4>
+                <h4 class="section-title">Wyniki egzaminów</h4>
 
                 <!-- E8 Results -->
                 <div v-if="selectedPoint.wyniki_e8?.length" class="mb-6">
-                    <h5
-                        class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    <h5 class="exam-title">
                         <svg
-                            class="w-4 h-4 mr-2 text-blue-500"
+                            class="exam-icon text-blue-500"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -228,12 +219,12 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                         </svg>
                         Egzamin ósmoklasisty
                     </h5>
-                    <div class="bg-gray-50 rounded-lg overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full results-table">
+                            <thead class="border-b border-gray-200">
+                                <tr>
                                     <th
-                                        class="px-3 py-2 text-left text-xs font-medium text-gray-700">
+                                        class="px-1 py-2 text-left text-xs font-medium text-gray-700">
                                         Przedmiot
                                     </th>
                                     <th
@@ -241,7 +232,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                             selectedPoint.wyniki_e8,
                                         ).years"
                                         :key="`e8-year-${year}`"
-                                        class="px-3 py-2 text-center text-xs font-medium text-gray-700">
+                                        class="px-1 py-2 text-center text-xs font-medium text-gray-700">
                                         {{ year }}
                                     </th>
                                 </tr>
@@ -253,10 +244,8 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                     ) in groupResultsBySubject(
                                         selectedPoint.wyniki_e8,
                                     ).grouped"
-                                    :key="`e8-${subject}`"
-                                    class="hover:bg-gray-50">
-                                    <td
-                                        class="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">
+                                    :key="`e8-${subject}`">
+                                    <td class="table-cell whitespace-nowrap">
                                         {{ subject }}
                                     </td>
                                     <td
@@ -264,7 +253,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                             selectedPoint.wyniki_e8,
                                         ).years"
                                         :key="`e8-${subject}-${year}`"
-                                        class="px-3 py-2 text-center text-xs">
+                                        class="table-cell text-center">
                                         <template v-if="yearData[year]">
                                             <div
                                                 class="font-medium text-gray-900">
@@ -305,10 +294,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
                 <!-- Matura Results -->
                 <div v-if="selectedPoint.wyniki_em?.length">
-                    <h5
-                        class="text-sm font-medium text-gray-700 mb-3 flex items-center">
+                    <h5 class="exam-title">
                         <svg
-                            class="w-4 h-4 mr-2 text-green-500"
+                            class="exam-icon text-green-500"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -316,12 +304,12 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                         </svg>
                         Egzamin maturalny
                     </h5>
-                    <div class="bg-gray-50 rounded-lg overflow-x-auto">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-100">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full results-table">
+                            <thead class="border-b border-gray-200">
+                                <tr>
                                     <th
-                                        class="px-3 py-2 text-left text-xs font-medium text-gray-700">
+                                        class="px-1 py-2 text-left text-xs font-medium text-gray-700">
                                         Przedmiot
                                     </th>
                                     <th
@@ -329,7 +317,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                             selectedPoint.wyniki_em,
                                         ).years"
                                         :key="`em-year-${year}`"
-                                        class="px-3 py-2 text-center text-xs font-medium text-gray-700">
+                                        class="px-1 py-2 text-center text-xs font-medium text-gray-700">
                                         {{ year }}
                                     </th>
                                 </tr>
@@ -341,10 +329,8 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                     ) in groupResultsBySubject(
                                         selectedPoint.wyniki_em,
                                     ).grouped"
-                                    :key="`em-${subject}`"
-                                    class="hover:bg-gray-50">
-                                    <td
-                                        class="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">
+                                    :key="`em-${subject}`">
+                                    <td class="table-cell whitespace-nowrap">
                                         {{ subject }}
                                     </td>
                                     <td
@@ -352,7 +338,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                             selectedPoint.wyniki_em,
                                         ).years"
                                         :key="`em-${subject}-${year}`"
-                                        class="px-3 py-2 text-center text-xs">
+                                        class="table-cell text-center">
                                         <template v-if="yearData[year]">
                                             <div
                                                 class="font-medium text-gray-900">
@@ -400,26 +386,21 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
             <!-- School Information Section -->
             <div class="p-6 space-y-4">
-                <h4
-                    class="text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4">
-                    Informacje o szkole
-                </h4>
+                <h4 class="section-title">Informacje o szkole</h4>
 
                 <!-- Basic Info -->
                 <div class="space-y-3">
                     <!-- Student Count -->
-                    <div
-                        v-if="selectedPoint.liczba_uczniow"
-                        class="flex items-start">
+                    <div v-if="selectedPoint.liczba_uczniow" class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
                                 d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">Liczba uczniów</p>
+                            <p class="info-item-label">Liczba uczniów</p>
                             <p class="text-sm text-gray-900 font-medium">
                                 {{ selectedPoint.liczba_uczniow }}
                             </p>
@@ -432,9 +413,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                             selectedPoint.dyrektor_imie ||
                             selectedPoint.dyrektor_nazwisko
                         "
-                        class="flex items-start">
+                        class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -443,7 +424,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 clip-rule="evenodd" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">Dyrektor</p>
+                            <p class="info-item-label">Dyrektor</p>
                             <p class="text-sm text-gray-900 font-medium">
                                 {{ selectedPoint.dyrektor_imie }}
                                 {{ selectedPoint.dyrektor_nazwisko }}
@@ -452,9 +433,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     </div>
 
                     <!-- Address -->
-                    <div class="flex items-start">
+                    <div class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -463,7 +444,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 clip-rule="evenodd" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">Adres</p>
+                            <p class="info-item-label">Adres</p>
                             <p class="text-sm text-gray-900">
                                 {{ formatAddress(selectedPoint).addressLine1 }}
                             </p>
@@ -474,25 +455,25 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     </div>
 
                     <!-- Contact Info -->
-                    <div v-if="selectedPoint.telefon" class="flex items-start">
+                    <div v-if="selectedPoint.telefon" class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
                                 d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">Telefon</p>
+                            <p class="info-item-label">Telefon</p>
                             <p class="text-sm text-gray-900">
                                 {{ selectedPoint.telefon }}
                             </p>
                         </div>
                     </div>
 
-                    <div v-if="selectedPoint.email" class="flex items-start">
+                    <div v-if="selectedPoint.email" class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -501,10 +482,10 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">Email</p>
+                            <p class="info-item-label">Email</p>
                             <a
                                 :href="`mailto:${selectedPoint.email}`"
-                                class="text-sm text-blue-600 hover:text-blue-800">
+                                class="contact-link">
                                 {{ selectedPoint.email }}
                             </a>
                         </div>
@@ -512,9 +493,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
                     <div
                         v-if="selectedPoint.strona_internetowa"
-                        class="flex items-start">
+                        class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -523,9 +504,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 clip-rule="evenodd" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500">
-                                Strona internetowa
-                            </p>
+                            <p class="info-item-label">Strona internetowa</p>
                             <a
                                 :href="
                                     selectedPoint.strona_internetowa.startsWith(
@@ -535,7 +514,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                         : `https://${selectedPoint.strona_internetowa}`
                                 "
                                 target="_blank"
-                                class="text-sm text-blue-600 hover:text-blue-800 break-all">
+                                class="contact-link break-all">
                                 {{ selectedPoint.strona_internetowa }}
                             </a>
                         </div>
@@ -544,23 +523,21 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     <!-- Educational Stages -->
                     <div
                         v-if="selectedPoint.etapy_edukacji?.length"
-                        class="flex items-start">
+                        class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
                                 d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500 mb-1">
-                                Etapy edukacji
-                            </p>
+                            <p class="info-item-label mb-1">Etapy edukacji</p>
                             <div class="flex flex-wrap gap-1">
                                 <span
                                     v-for="etap in selectedPoint.etapy_edukacji"
                                     :key="etap.id"
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-800">
+                                    class="tag tag-indigo">
                                     {{ etap.nazwa }}
                                 </span>
                             </div>
@@ -570,9 +547,9 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     <!-- Professional Education -->
                     <div
                         v-if="selectedPoint.ksztalcenie_zawodowe?.length"
-                        class="flex items-start">
+                        class="info-item">
                         <svg
-                            class="w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0"
+                            class="info-item-icon"
                             fill="currentColor"
                             viewBox="0 0 20 20">
                             <path
@@ -583,14 +560,14 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                         </svg>
                         <div class="flex-1">
-                            <p class="text-xs text-gray-500 mb-1">
+                            <p class="info-item-label mb-1">
                                 Kształcenie zawodowe
                             </p>
                             <div class="flex flex-wrap gap-1">
                                 <span
                                     v-for="ksztalcenie in selectedPoint.ksztalcenie_zawodowe"
                                     :key="ksztalcenie.id"
-                                    class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-800">
+                                    class="tag tag-orange">
                                     {{ ksztalcenie.nazwa }}
                                 </span>
                             </div>
@@ -629,23 +606,21 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
         </div>
 
         <!-- Empty State -->
-        <div v-else class="flex items-center justify-center h-full p-6">
-            <div class="text-center">
-                <svg
-                    class="mx-auto h-12 w-12 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                </svg>
-                <p class="mt-2 text-sm text-gray-500">
-                    Wybierz szkołę na mapie
-                </p>
-            </div>
+        <div
+            v-else
+            class="flex items-center justify-center h-full p-6 text-center">
+            <svg
+                class="mx-auto h-12 w-12 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+            <p class="mt-2 text-sm text-gray-500">Wybierz szkołę na mapie</p>
         </div>
     </div>
 
@@ -655,3 +630,56 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
         class="fixed inset-0 bg-black opacity-25 z-40 lg:hidden"
         @click="closeSidebar" />
 </template>
+
+<style scoped>
+@reference "tailwindcss";
+
+.badge-icon {
+    @apply w-3 h-3 mr-1.5;
+}
+.badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+}
+.badge-blue {
+    @apply bg-blue-100 text-blue-800;
+}
+.badge-green {
+    @apply bg-green-100 text-green-800;
+}
+.badge-purple {
+    @apply bg-purple-100 text-purple-800;
+}
+.section-title {
+    @apply text-sm font-semibold text-gray-900 uppercase tracking-wide mb-4;
+}
+.exam-title {
+    @apply text-sm font-medium text-gray-700 mb-3 flex items-center;
+}
+.exam-icon {
+    @apply w-4 h-4 mr-2;
+}
+.table-cell {
+    @apply px-3 py-2 text-xs;
+}
+.info-item {
+    @apply flex items-start;
+}
+.info-item-icon {
+    @apply w-4 h-4 text-gray-400 mt-0.5 mr-3 flex-shrink-0;
+}
+.info-item-label {
+    @apply text-xs text-gray-500;
+}
+.contact-link {
+    @apply text-sm text-blue-600 hover:text-blue-800;
+}
+.tag {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+}
+.tag-indigo {
+    @apply bg-indigo-100 text-indigo-800;
+}
+.tag-orange {
+    @apply bg-orange-100 text-orange-800;
+}
+</style>
