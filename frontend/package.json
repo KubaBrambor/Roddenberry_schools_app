@@ -33,6 +33,7 @@
     "dependencies": {
         "@indoorequal/vue-maplibre-gl": "^8.4.2",
         "@nuxt/eslint": "1.5.2",
+        "@nuxt/icon": "2.1.0",
         "@tailwindcss/vite": "^4.1.12",
         "eslint": "^9.31.0",
         "maplibre-gl": "^5.7.1",

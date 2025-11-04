@@ -14,9 +14,13 @@ export default defineNuxtConfig({
 
     // Add tailwind as Vite plugin
     css: ["~/assets/css/main.css"],
+    icon: {
+        mode: "css",
+        cssLayer: "base",
+    },
     vite: {
         plugins: [tailwindcss()],
     },
 
-    modules: ["@nuxt/eslint", "nuxt-maplibre"],
+    modules: ["@nuxt/eslint", "nuxt-maplibre", "@nuxt/icon"],
 })
