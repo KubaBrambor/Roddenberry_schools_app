@@ -10,7 +10,7 @@ interface Props {
     selectedPoint: SzkolaPublicWithRelations | null
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 // Define emits for closing the sidebar
 const emit = defineEmits<{
@@ -28,23 +28,32 @@ const isPublicSchool = (status: string) => {
 
 const { getColor } = useScoreColor()
 
-// Group exam results by year
-const groupResultsByYear = (
+// Computed property for selected point score color
+const scoreColor = computed(() => {
+    return props.selectedPoint ? getColor(props.selectedPoint.score) : ""
+})
+
+// Group exam results by subject
+const groupResultsBySubject = (
     results: WynikE8PublicWithPrzedmiot[] | WynikEMPublicWithPrzedmiot[],
 ) => {
-    return results.reduce(
-        (acc, result) => {
-            if (!acc[result.rok]) {
-                acc[result.rok] = []
-            }
-            acc[result.rok]?.push(result)
-            return acc
-        },
-        {} as Record<
-            number,
-            WynikE8PublicWithPrzedmiot[] | WynikEMPublicWithPrzedmiot[]
-        >,
-    )
+    const grouped: Record<
+        string,
+        Record<number, WynikE8PublicWithPrzedmiot | WynikEMPublicWithPrzedmiot>
+    > = {}
+    const years = new Set<number>()
+
+    results.forEach((result) => {
+        const subjectName = result.przedmiot.nazwa
+        years.add(result.rok)
+
+        if (!grouped[subjectName]) {
+            grouped[subjectName] = {}
+        }
+        grouped[subjectName][result.rok] = result
+    })
+
+    return { grouped, years: Array.from(years).sort() }
 }
 
 // Format address
@@ -166,7 +175,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 <span
                                     :class="'text-3xl font-bold'"
                                     :style="{
-                                        color: getColor(selectedPoint.score),
+                                        color: scoreColor,
                                     }">
                                     {{ Math.round(selectedPoint.score) }}
                                 </span>
@@ -185,9 +194,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                                 ]"
                                 :style="{
                                     width: `${selectedPoint.score}%`,
-                                    'background-color': getColor(
-                                        selectedPoint.score,
-                                    ),
+                                    'background-color': scoreColor,
                                 }" />
                         </div>
                     </div>
@@ -221,69 +228,78 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                         </svg>
                         Egzamin ósmoklasisty
                     </h5>
-                    <div
-                        v-for="(results, year) in groupResultsByYear(
-                            selectedPoint.wyniki_e8,
-                        )"
-                        :key="`e8-${year}`"
-                        class="mb-4">
-                        <p class="text-xs font-medium text-gray-500 mb-2">
-                            Rok {{ year }}
-                        </p>
-                        <div class="bg-gray-50 rounded-lg overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th
-                                            class="px-3 py-2 text-left text-xs font-medium text-gray-700">
-                                            Przedmiot
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Średnia
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Mediana
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Zdających
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    <tr
-                                        v-for="result in results"
-                                        :key="result.id"
-                                        class="hover:bg-gray-50">
-                                        <td
-                                            class="px-3 py-2 text-xs text-gray-900">
-                                            {{ result.przedmiot.nazwa }}
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center font-medium text-gray-900">
-                                            {{
-                                                result.wynik_sredni?.toFixed(
-                                                    1,
-                                                ) || "-"
-                                            }}%
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center text-gray-600">
-                                            {{
-                                                result.mediana?.toFixed(1) ||
-                                                "-"
-                                            }}%
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center text-gray-600">
-                                            {{ result.liczba_zdajacych || "-" }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="bg-gray-50 rounded-lg overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th
+                                        class="px-3 py-2 text-left text-xs font-medium text-gray-700">
+                                        Przedmiot
+                                    </th>
+                                    <th
+                                        v-for="year in groupResultsBySubject(
+                                            selectedPoint.wyniki_e8,
+                                        ).years"
+                                        :key="`e8-year-${year}`"
+                                        class="px-3 py-2 text-center text-xs font-medium text-gray-700">
+                                        {{ year }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr
+                                    v-for="(
+                                        yearData, subject
+                                    ) in groupResultsBySubject(
+                                        selectedPoint.wyniki_e8,
+                                    ).grouped"
+                                    :key="`e8-${subject}`"
+                                    class="hover:bg-gray-50">
+                                    <td
+                                        class="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">
+                                        {{ subject }}
+                                    </td>
+                                    <td
+                                        v-for="year in groupResultsBySubject(
+                                            selectedPoint.wyniki_e8,
+                                        ).years"
+                                        :key="`e8-${subject}-${year}`"
+                                        class="px-3 py-2 text-center text-xs">
+                                        <template v-if="yearData[year]">
+                                            <div
+                                                class="font-medium text-gray-900">
+                                                {{
+                                                    yearData[
+                                                        year
+                                                    ].wynik_sredni?.toFixed(
+                                                        1,
+                                                    ) || "-"
+                                                }}%
+                                            </div>
+                                            <div class="text-gray-500">
+                                                {{
+                                                    yearData[
+                                                        year
+                                                    ].mediana?.toFixed(1) ||
+                                                    "-"
+                                                }}%
+                                            </div>
+                                            <div
+                                                class="text-gray-400 text-[10px]">
+                                                ({{
+                                                    yearData[year]
+                                                        .liczba_zdajacych ||
+                                                    "-"
+                                                }})
+                                            </div>
+                                        </template>
+                                        <span v-else class="text-gray-400"
+                                            >-</span
+                                        >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -300,82 +316,84 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                         </svg>
                         Egzamin maturalny
                     </h5>
-                    <div
-                        v-for="(results, year) in groupResultsByYear(
-                            selectedPoint.wyniki_em,
-                        )"
-                        :key="`em-${year}`"
-                        class="mb-4">
-                        <p class="text-xs font-medium text-gray-500 mb-2">
-                            Rok {{ year }}
-                        </p>
-                        <div class="bg-gray-50 rounded-lg overflow-x-auto">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th
-                                            class="px-3 py-2 text-left text-xs font-medium text-gray-700">
-                                            Przedmiot
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Średnia
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Zdawalność
-                                        </th>
-                                        <th
-                                            class="px-3 py-2 text-center text-xs font-medium text-gray-700">
-                                            Zdających
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200">
-                                    <tr
-                                        v-for="result in results"
-                                        :key="result.id"
-                                        class="hover:bg-gray-50">
-                                        <td
-                                            class="px-3 py-2 text-xs text-gray-900">
-                                            {{ result.przedmiot.nazwa }}
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center font-medium text-gray-900">
-                                            {{
-                                                result.sredni_wynik?.toFixed(
-                                                    1,
-                                                ) || "-"
-                                            }}%
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center">
-                                            <span
-                                                v-if="result.zdawalnosc"
-                                                :class="[
-                                                    'inline-flex px-2 py-0.5 rounded-full font-medium',
-                                                ]"
+                    <div class="bg-gray-50 rounded-lg overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th
+                                        class="px-3 py-2 text-left text-xs font-medium text-gray-700">
+                                        Przedmiot
+                                    </th>
+                                    <th
+                                        v-for="year in groupResultsBySubject(
+                                            selectedPoint.wyniki_em,
+                                        ).years"
+                                        :key="`em-year-${year}`"
+                                        class="px-3 py-2 text-center text-xs font-medium text-gray-700">
+                                        {{ year }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr
+                                    v-for="(
+                                        yearData, subject
+                                    ) in groupResultsBySubject(
+                                        selectedPoint.wyniki_em,
+                                    ).grouped"
+                                    :key="`em-${subject}`"
+                                    class="hover:bg-gray-50">
+                                    <td
+                                        class="px-3 py-2 text-xs text-gray-900 whitespace-nowrap">
+                                        {{ subject }}
+                                    </td>
+                                    <td
+                                        v-for="year in groupResultsBySubject(
+                                            selectedPoint.wyniki_em,
+                                        ).years"
+                                        :key="`em-${subject}-${year}`"
+                                        class="px-3 py-2 text-center text-xs">
+                                        <template v-if="yearData[year]">
+                                            <div
+                                                class="font-medium text-gray-900">
+                                                {{
+                                                    yearData[
+                                                        year
+                                                    ].sredni_wynik?.toFixed(
+                                                        1,
+                                                    ) || "-"
+                                                }}%
+                                            </div>
+                                            <div
+                                                v-if="yearData[year].zdawalnosc"
                                                 :style="{
                                                     color: getColor(
-                                                        result.zdawalnosc,
+                                                        yearData[year]
+                                                            .zdawalnosc,
                                                     ),
                                                 }">
                                                 {{
-                                                    result.zdawalnosc.toFixed(
-                                                        0,
-                                                    )
+                                                    yearData[
+                                                        year
+                                                    ].zdawalnosc.toFixed(0)
                                                 }}%
-                                            </span>
-                                            <span v-else>-</span>
-                                        </td>
-                                        <td
-                                            class="px-3 py-2 text-xs text-center text-gray-600">
-                                            {{ result.liczba_zdajacych || "-" }}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                            </div>
+                                            <div
+                                                class="text-gray-400 text-[10px]">
+                                                ({{
+                                                    yearData[year]
+                                                        .liczba_zdajacych ||
+                                                    "-"
+                                                }})
+                                            </div>
+                                        </template>
+                                        <span v-else class="text-gray-400"
+                                            >-</span
+                                        >
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
