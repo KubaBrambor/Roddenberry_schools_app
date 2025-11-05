@@ -37,7 +37,7 @@ const handleSidebarClose = () => {
         <NavBar transparent />
 
         <!-- Sidebar -->
-        <MapSidebar
+        <SidebarMain
             :is-open="isSidebarOpen"
             :selected-point="selectedSchool"
             @close="handleSidebarClose" />
