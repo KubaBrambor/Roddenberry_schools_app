@@ -73,7 +73,7 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
     <div
         :class="[
             'fixed top-0 left-0 h-full bg-white shadow-2xl transition-transform duration-300 z-50',
-            'w-72 md:w-96 border-r border-gray-200',
+            'max-w-md min-w-xs  border-r border-gray-200',
             isOpen ? 'transform translate-x-0' : 'transform -translate-x-full',
         ]">
         <!-- Sidebar Header -->
@@ -173,174 +173,149 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                     selectedPoint.wyniki_em?.length
                 "
                 class="p-6 border-b">
-                <h4 class="section-title">Wyniki egzaminów</h4>
+                <h4 class="exam-title">
+                    <Icon name="mdi:school" class="exam-icon text-green-500" />
+                    Wyniki z egzaminów
+                </h4>
 
-                <!-- E8 Results -->
-                <div v-if="selectedPoint.wyniki_e8?.length" class="mb-6">
-                    <h5 class="exam-title">
-                        <Icon
-                            name="mdi:calendar-edit"
-                            class="exam-icon text-blue-500" />
-                        Egzamin ósmoklasisty
-                    </h5>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full results-table">
-                            <thead class="border-b border-gray-200">
-                                <tr>
-                                    <th
-                                        class="px-1 py-2 text-left text-xs font-medium text-gray-700">
-                                        Przedmiot
-                                    </th>
-                                    <th
-                                        v-for="year in groupResultsBySubject(
-                                            selectedPoint.wyniki_e8,
-                                        ).years"
-                                        :key="`e8-year-${year}`"
-                                        class="px-1 py-2 text-center text-xs font-medium text-gray-700">
-                                        {{ year }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <tr
-                                    v-for="(
-                                        yearData, subject
-                                    ) in groupResultsBySubject(
+                <!-- E8 Results Table -->
+                <div
+                    v-if="selectedPoint.wyniki_e8?.length"
+                    class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-300">
+                                <th
+                                    class="text-left py-2 px-2 font-semibold text-gray-700">
+                                    Przedmiot
+                                </th>
+                                <th
+                                    v-for="year in groupResultsBySubject(
                                         selectedPoint.wyniki_e8,
-                                    ).grouped"
-                                    :key="`e8-${subject}`">
-                                    <td class="table-cell whitespace-nowrap">
-                                        {{ subject }}
-                                    </td>
-                                    <td
-                                        v-for="year in groupResultsBySubject(
-                                            selectedPoint.wyniki_e8,
-                                        ).years"
-                                        :key="`e8-${subject}-${year}`"
-                                        class="table-cell text-center">
-                                        <template v-if="yearData[year]">
-                                            <div
-                                                class="font-medium text-gray-900">
-                                                {{
-                                                    yearData[
-                                                        year
-                                                    ].wynik_sredni?.toFixed(
-                                                        1,
-                                                    ) || "-"
-                                                }}%
-                                            </div>
-                                            <div class="text-gray-500">
-                                                {{
-                                                    yearData[
-                                                        year
-                                                    ].mediana?.toFixed(1) ||
-                                                    "-"
-                                                }}%
-                                            </div>
-                                            <div
-                                                class="text-gray-400 text-[10px]">
-                                                ({{
+                                    ).years"
+                                    :key="`year-${year}`"
+                                    class="text-center py-2 px-2 font-semibold text-gray-700">
+                                    {{ year }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(
+                                    yearData, subject
+                                ) in groupResultsBySubject(
+                                    selectedPoint.wyniki_e8,
+                                ).grouped"
+                                :key="`e8-${subject}`"
+                                class="border-b border-gray-200">
+                                <td class="py-3 px-2 text-gray-900">
+                                    <div class="font-medium">{{ subject }}</div>
+                                </td>
+                                <td
+                                    v-for="year in groupResultsBySubject(
+                                        selectedPoint.wyniki_e8,
+                                    ).years"
+                                    :key="`e8-${subject}-${year}`"
+                                    class="text-center py-3 px-2">
+                                    <template v-if="yearData[year]">
+                                        <div
+                                            class="text-2xl font-bold mb-1"
+                                            :style="{
+                                                color: getColor(
                                                     yearData[year]
-                                                        .liczba_zdajacych ||
-                                                    "-"
-                                                }})
-                                            </div>
-                                        </template>
-                                        <span v-else class="text-gray-400"
-                                            >-</span
-                                        >
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                                        .wynik_sredni || 0,
+                                                ),
+                                            }">
+                                            {{
+                                                Math.round(
+                                                    yearData[year]
+                                                        .wynik_sredni || 0,
+                                                )
+                                            }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{
+                                                yearData[year].liczba_zdajacych
+                                                    ? `#${yearData[year].liczba_zdajacych}`
+                                                    : ""
+                                            }}
+                                        </div>
+                                    </template>
+                                    <span v-else class="text-gray-300">-</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Matura Results -->
-                <div v-if="selectedPoint.wyniki_em?.length">
-                    <h5 class="exam-title">
-                        <Icon
-                            name="mdi:school"
-                            class="exam-icon text-green-500" />
-                        Egzamin maturalny
-                    </h5>
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full results-table">
-                            <thead class="border-b border-gray-200">
-                                <tr>
-                                    <th
-                                        class="px-1 py-2 text-left text-xs font-medium text-gray-700">
-                                        Przedmiot
-                                    </th>
-                                    <th
-                                        v-for="year in groupResultsBySubject(
-                                            selectedPoint.wyniki_em,
-                                        ).years"
-                                        :key="`em-year-${year}`"
-                                        class="px-1 py-2 text-center text-xs font-medium text-gray-700">
-                                        {{ year }}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200">
-                                <tr
-                                    v-for="(
-                                        yearData, subject
-                                    ) in groupResultsBySubject(
+                <!-- Matura Results Table -->
+                <div
+                    v-if="selectedPoint.wyniki_em?.length"
+                    class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-300">
+                                <th
+                                    class="text-left py-2 px-2 font-semibold text-gray-700">
+                                    Przedmiot
+                                </th>
+                                <th
+                                    v-for="year in groupResultsBySubject(
                                         selectedPoint.wyniki_em,
-                                    ).grouped"
-                                    :key="`em-${subject}`">
-                                    <td class="table-cell whitespace-nowrap">
-                                        {{ subject }}
-                                    </td>
-                                    <td
-                                        v-for="year in groupResultsBySubject(
-                                            selectedPoint.wyniki_em,
-                                        ).years"
-                                        :key="`em-${subject}-${year}`"
-                                        class="table-cell text-center">
-                                        <template v-if="yearData[year]">
-                                            <div
-                                                class="font-medium text-gray-900">
-                                                {{
-                                                    yearData[
-                                                        year
-                                                    ].sredni_wynik?.toFixed(
-                                                        1,
-                                                    ) || "-"
-                                                }}%
-                                            </div>
-                                            <div
-                                                v-if="yearData[year].zdawalnosc"
-                                                :style="{
-                                                    color: getColor(
-                                                        yearData[year]
-                                                            .zdawalnosc,
-                                                    ),
-                                                }">
-                                                {{
-                                                    yearData[
-                                                        year
-                                                    ].zdawalnosc.toFixed(0)
-                                                }}%
-                                            </div>
-                                            <div
-                                                class="text-gray-400 text-[10px]">
-                                                ({{
+                                    ).years"
+                                    :key="`year-${year}`"
+                                    class="text-center py-2 px-2 font-semibold text-gray-700">
+                                    {{ year }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(
+                                    yearData, subject
+                                ) in groupResultsBySubject(
+                                    selectedPoint.wyniki_em,
+                                ).grouped"
+                                :key="`em-${subject}`"
+                                class="border-b border-gray-200">
+                                <td class="py-3 px-2 text-gray-900">
+                                    <div class="font-medium">{{ subject }}</div>
+                                </td>
+                                <td
+                                    v-for="year in groupResultsBySubject(
+                                        selectedPoint.wyniki_em,
+                                    ).years"
+                                    :key="`em-${subject}-${year}`"
+                                    class="text-center py-3 px-2">
+                                    <template v-if="yearData[year]">
+                                        <div
+                                            class="text-2xl font-bold mb-1"
+                                            :style="{
+                                                color: getColor(
                                                     yearData[year]
-                                                        .liczba_zdajacych ||
-                                                    "-"
-                                                }})
-                                            </div>
-                                        </template>
-                                        <span v-else class="text-gray-400"
-                                            >-</span
-                                        >
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                                                        .sredni_wynik || 0,
+                                                ),
+                                            }">
+                                            {{
+                                                Math.round(
+                                                    yearData[year]
+                                                        .sredni_wynik || 0,
+                                                )
+                                            }}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            {{
+                                                yearData[year].liczba_zdajacych
+                                                    ? `#${yearData[year].liczba_zdajacych}`
+                                                    : ""
+                                            }}
+                                        </div>
+                                    </template>
+                                    <span v-else class="text-gray-300">-</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -543,9 +518,6 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 }
 .exam-icon {
     @apply w-4 h-4 mr-2;
-}
-.table-cell {
-    @apply px-3 py-2 text-xs;
 }
 .info-item {
     @apply flex items-start;
