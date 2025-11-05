@@ -167,18 +167,9 @@ onUnmounted(() => {
                     :aria-label="'Close notification'"
                     type="button"
                     @click="closeMessage">
-                    <svg
-                        class="w-4 h-4 transition-transform duration-200 group-hover:scale-110"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2.5"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+                    <Icon
+                        name="mdi:close"
+                        class="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
                 </button>
             </div>
 
