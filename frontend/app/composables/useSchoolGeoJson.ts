@@ -1,7 +1,9 @@
 import type { Feature, FeatureCollection, Point } from "geojson"
 import type { SzkolaPublicShort } from "~/types/schools"
 
-export const useSchoolGeoJson = (schools: Ref<SzkolaPublicShort[] | null>) => {
+export const useSchoolGeoJson = (
+    schools: Ref<SzkolaPublicShort[] | undefined>,
+) => {
     const transformSchoolsToFeatures = (
         schools: SzkolaPublicShort[],
     ): Feature<Point, SzkolaPublicShort>[] => {

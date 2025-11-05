@@ -7,7 +7,7 @@ import type {
 } from "~/types/schools"
 
 const props = defineProps<{
-    schools: SzkolaPublicShort[] | null
+    schools: SzkolaPublicShort[] | undefined
 }>()
 
 const emit = defineEmits<{
