@@ -16,7 +16,7 @@ const emit = defineEmits<{
 const selectedSchoolType = ref<number>()
 
 const schoolTypePromises = mainSchoolTypes.map((mainType) => {
-    return useApi<[TypSzkolyPublic]>("/school_types/", {
+    return useApi<TypSzkolyPublic[]>("/school_types/", {
         query: { name: mainType },
     })
 })

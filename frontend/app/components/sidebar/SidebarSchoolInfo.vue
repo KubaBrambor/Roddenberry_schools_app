@@ -5,7 +5,7 @@ interface Props {
     selectedPoint: SzkolaPublicWithRelations
 }
 
-defineProps<Props>()
+const props = defineProps<Props>()
 
 const formatAddress = (school: SzkolaPublicWithRelations) => {
     const parts = []
@@ -18,6 +18,8 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
 
     return { addressLine1, addressLine2 }
 }
+
+const formattedAddress = computed(() => formatAddress(props.selectedPoint))
 </script>
 <template>
     <!-- School Information Section -->
@@ -60,10 +62,10 @@ const formatAddress = (school: SzkolaPublicWithRelations) => {
                 <div class="flex-1">
                     <p class="info-item-label">Adres</p>
                     <p class="text-sm text-gray-900">
-                        {{ formatAddress(selectedPoint).addressLine1 }}
+                        {{ formattedAddress.addressLine1 }}
                     </p>
                     <p class="text-sm text-gray-900">
-                        {{ formatAddress(selectedPoint).addressLine2 }}
+                        {{ formattedAddress.addressLine2 }}
                     </p>
                 </div>
             </div>
