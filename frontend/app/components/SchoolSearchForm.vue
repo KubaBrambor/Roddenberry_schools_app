@@ -40,7 +40,6 @@ const handleSubmit = () => {
         return
     }
     // Emit the submit event with the form data as a payload
-    console.log(`Selected Scohol type: ${selectedSchoolType.value}`)
     emit("submit", {
         schoolType: selectedSchoolType.value,
         voivodeship: props.selectedVoivodeship,

@@ -1,7 +1,7 @@
 /**
  * TypeScript types for school-related data models
  * These types correspond to the backend Python models in app.models.schools
- * Types were generated using a opeanapi-typescript generator
+ * Types were generated using a openapi-typescript generator
  */
 import type { components } from "./api"
 
