@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=list[TypSzkolyPublic] | TypSzkolyPublic)
+@router.get("/", response_model=list[TypSzkolyPublic])
 async def read_school_types(session: SessionDep, name: str | None = None):
     """
     Fetch all available school types or just one type if type name is provided.
@@ -23,10 +23,8 @@ async def read_school_types(session: SessionDep, name: str | None = None):
     if name:
         statement = statement.where(TypSzkoly.nazwa == name)
     school_types = session.exec(statement).all()
-    if not school_types:
-        raise HTTPException(status_code=404, detail="School types not found")
-    if len(school_types) == 1:
-        return school_types[0]
+    if name and not school_types:
+        raise HTTPException(status_code=404, detail="School type not found")
     return school_types
 
 
