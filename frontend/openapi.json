@@ -138,17 +138,10 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "anyOf": [
-                                        {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/TypSzkolyPublic"
-                                            }
-                                        },
-                                        {
-                                            "$ref": "#/components/schemas/TypSzkolyPublic"
-                                        }
-                                    ],
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TypSzkolyPublic"
+                                    },
                                     "title": "Response Read School Types School Types  Get"
                                 }
                             }
@@ -617,7 +610,14 @@
                         "$ref": "#/components/schemas/MiejscowoscPublic"
                     },
                     "ulica": {
-                        "$ref": "#/components/schemas/UlicaPublic"
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UlicaPublic"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
                     },
                     "ksztalcenie_zawodowe": {
                         "items": {
