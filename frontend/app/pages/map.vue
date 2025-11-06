@@ -3,13 +3,24 @@ import type {
     SzkolaPublicWithRelations,
     SzkolaPublicShort,
 } from "~/types/schools"
+import { MAP_CONFIG } from "~/constants/mapConfig"
 
 const route = useRoute()
-
 // Create a computed property for query parameters to refetch data after changing them
-const queryParams = computed(() => ({
-    ...route.query,
-}))
+const queryParams = computed(() => {
+    const routeQuery = route.query
+
+    // Check if route.query is empty or missing bbox parameters
+    if (!routeQuery || Object.keys(routeQuery).length === 0) {
+        // Use default bbox from warsaw bounds
+        const [minLng, minLat] = MAP_CONFIG.warsawBounds[0]
+        const [maxLng, maxLat] = MAP_CONFIG.warsawBounds[1]
+        return {
+            bbox: `${minLng},${minLat},${maxLng},${maxLat}`,
+        }
+    }
+    return routeQuery
+})
 
 const { data, status } = useApi<SzkolaPublicShort[]>("/schools", {
     // useFetch will automatically unwrap the .value of the computed property

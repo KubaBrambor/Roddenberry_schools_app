@@ -3,17 +3,20 @@ import diamondIconUrl from "~/assets/images/figures/diamond.png"
 import squareIconUrl from "~/assets/images/figures/square.png"
 import starIconUrl from "~/assets/images/figures/star.png"
 import hexagonIconUrl from "~/assets/images/figures/hexagon.png"
-import type { LngLatBoundsLike } from "maplibre-gl"
 
 // constants/mapConfig.ts
 export const MAP_CONFIG = {
     style: "https://tiles.openfreemap.org/styles/liberty",
-    defaultCenter: [19, 52] as [number, number],
-    defaultZoom: 8,
+    defaultCenter: [21.008333, 52.232222] as [number, number],
+    defaultZoom: 12,
     polandBounds: [
         [14.0, 49],
         [24.5, 55.2],
-    ] as LngLatBoundsLike,
+    ] as [[number, number], [number, number]],
+    warsawBounds: [
+        [20.7639, 52.1189],
+        [21.3901, 52.3473],
+    ] as [[number, number], [number, number]],
 }
 
 export const SCHOOL_ICONS = {
