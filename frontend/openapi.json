@@ -1,0 +1,885 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "FastAPI",
+        "version": "0.1.0"
+    },
+    "paths": {
+        "/schools/{school_id}": {
+            "get": {
+                "tags": ["schools"],
+                "summary": "Read School",
+                "operationId": "read_school_schools__school_id__get",
+                "parameters": [
+                    {
+                        "name": "school_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "School Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SzkolaPublicWithRelations"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/schools/": {
+            "get": {
+                "tags": ["schools"],
+                "summary": "Read Schools",
+                "operationId": "read_schools_schools__get",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Type"
+                        }
+                    },
+                    {
+                        "name": "bbox",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Bounding box: min_lng,min_lat,max_lng,max_lat",
+                            "title": "Bbox"
+                        },
+                        "description": "Bounding box: min_lng,min_lat,max_lng,max_lat",
+                        "example": "19.0,51.9,19.1,52.0"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/SzkolaPublicShort"
+                                    },
+                                    "title": "Response Read Schools Schools  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/school_types/": {
+            "get": {
+                "tags": ["school_types"],
+                "summary": "Read School Types",
+                "description": "Fetch all available school types or just one type if type name is provided.",
+                "operationId": "read_school_types_school_types__get",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Name"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TypSzkolyPublic"
+                                    },
+                                    "title": "Response Read School Types School Types  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/school_types/{school_type_id}": {
+            "get": {
+                "tags": ["school_types"],
+                "summary": "Read School Type By Id",
+                "operationId": "read_school_type_by_id_school_types__school_type_id__get",
+                "parameters": [
+                    {
+                        "name": "school_type_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "School Type Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TypSzkolyPublic"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Read Root",
+                "operationId": "read_root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "summary": "Read Users",
+                "operationId": "read_users_users_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EtapEdukacjiPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "EtapEdukacjiPublic"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "KategoriaUczniowPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "KategoriaUczniowPublic"
+            },
+            "KsztalcenieZawodowePublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "KsztalcenieZawodowePublic"
+            },
+            "MiejscowoscPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "teryt": {
+                        "type": "string",
+                        "title": "Teryt"
+                    },
+                    "gmina_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Gmina Id"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "teryt", "id"],
+                "title": "MiejscowoscPublic"
+            },
+            "PrzedmiotPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "PrzedmiotPublic"
+            },
+            "StatusPublicznoprawnyPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "StatusPublicznoprawnyPublic"
+            },
+            "SzkolaPublicShort": {
+                "properties": {
+                    "numer_rspo": {
+                        "type": "integer",
+                        "title": "Numer Rspo"
+                    },
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "geolokalizacja_latitude": {
+                        "type": "number",
+                        "title": "Geolokalizacja Latitude"
+                    },
+                    "geolokalizacja_longitude": {
+                        "type": "number",
+                        "title": "Geolokalizacja Longitude"
+                    },
+                    "score": {
+                        "type": "number",
+                        "title": "Score"
+                    },
+                    "typ": {
+                        "$ref": "#/components/schemas/TypSzkolyPublic"
+                    },
+                    "status_publicznoprawny": {
+                        "$ref": "#/components/schemas/StatusPublicznoprawnyPublic"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "numer_rspo",
+                    "nazwa",
+                    "id",
+                    "geolokalizacja_latitude",
+                    "geolokalizacja_longitude",
+                    "score",
+                    "typ",
+                    "status_publicznoprawny"
+                ],
+                "title": "SzkolaPublicShort"
+            },
+            "SzkolaPublicWithRelations": {
+                "properties": {
+                    "numer_rspo": {
+                        "type": "integer",
+                        "title": "Numer Rspo"
+                    },
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "nip": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Nip"
+                    },
+                    "regon": {
+                        "type": "string",
+                        "title": "Regon"
+                    },
+                    "liczba_uczniow": {
+                        "anyOf": [
+                            {
+                                "type": "integer",
+                                "minimum": 0
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Liczba Uczniow"
+                    },
+                    "dyrektor_imie": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dyrektor Imie"
+                    },
+                    "dyrektor_nazwisko": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Dyrektor Nazwisko"
+                    },
+                    "kod_pocztowy": {
+                        "type": "string",
+                        "title": "Kod Pocztowy"
+                    },
+                    "numer_budynku": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Numer Budynku"
+                    },
+                    "numer_lokalu": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Numer Lokalu"
+                    },
+                    "telefon": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Telefon"
+                    },
+                    "email": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Email"
+                    },
+                    "strona_internetowa": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Strona Internetowa"
+                    },
+                    "geolokalizacja_latitude": {
+                        "type": "number",
+                        "title": "Geolokalizacja Latitude"
+                    },
+                    "geolokalizacja_longitude": {
+                        "type": "number",
+                        "title": "Geolokalizacja Longitude"
+                    },
+                    "score": {
+                        "type": "number",
+                        "title": "Score",
+                        "default": 0
+                    },
+                    "typ_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Typ Id"
+                    },
+                    "status_publicznoprawny_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Status Publicznoprawny Id"
+                    },
+                    "kategoria_uczniow_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Kategoria Uczniow Id"
+                    },
+                    "miejscowosc_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Miejscowosc Id"
+                    },
+                    "ulica_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Ulica Id"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "etapy_edukacji": {
+                        "items": {
+                            "$ref": "#/components/schemas/EtapEdukacjiPublic"
+                        },
+                        "type": "array",
+                        "title": "Etapy Edukacji",
+                        "default": []
+                    },
+                    "typ": {
+                        "$ref": "#/components/schemas/TypSzkolyPublic"
+                    },
+                    "status_publicznoprawny": {
+                        "$ref": "#/components/schemas/StatusPublicznoprawnyPublic"
+                    },
+                    "kategoria_uczniow": {
+                        "$ref": "#/components/schemas/KategoriaUczniowPublic"
+                    },
+                    "miejscowosc": {
+                        "$ref": "#/components/schemas/MiejscowoscPublic"
+                    },
+                    "ulica": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/UlicaPublic"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "ksztalcenie_zawodowe": {
+                        "items": {
+                            "$ref": "#/components/schemas/KsztalcenieZawodowePublic"
+                        },
+                        "type": "array",
+                        "title": "Ksztalcenie Zawodowe"
+                    },
+                    "wyniki_e8": {
+                        "items": {
+                            "$ref": "#/components/schemas/WynikE8PublicWithPrzedmiot"
+                        },
+                        "type": "array",
+                        "title": "Wyniki E8"
+                    },
+                    "wyniki_em": {
+                        "items": {
+                            "$ref": "#/components/schemas/WynikEMPublicWithPrzedmiot"
+                        },
+                        "type": "array",
+                        "title": "Wyniki Em"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "numer_rspo",
+                    "nazwa",
+                    "regon",
+                    "kod_pocztowy",
+                    "geolokalizacja_latitude",
+                    "geolokalizacja_longitude",
+                    "id",
+                    "typ",
+                    "status_publicznoprawny",
+                    "kategoria_uczniow",
+                    "miejscowosc",
+                    "ulica",
+                    "ksztalcenie_zawodowe",
+                    "wyniki_e8",
+                    "wyniki_em"
+                ],
+                "title": "SzkolaPublicWithRelations"
+            },
+            "TypSzkolyPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "id"],
+                "title": "TypSzkolyPublic"
+            },
+            "UlicaPublic": {
+                "properties": {
+                    "nazwa": {
+                        "type": "string",
+                        "title": "Nazwa"
+                    },
+                    "teryt": {
+                        "type": "string",
+                        "title": "Teryt"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    }
+                },
+                "type": "object",
+                "required": ["nazwa", "teryt", "id"],
+                "title": "UlicaPublic"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": ["loc", "msg", "type"],
+                "title": "ValidationError"
+            },
+            "WynikE8PublicWithPrzedmiot": {
+                "properties": {
+                    "liczba_zdajacych": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Liczba Zdajacych"
+                    },
+                    "mediana": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mediana"
+                    },
+                    "wynik_sredni": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Wynik Sredni"
+                    },
+                    "szkola_id": {
+                        "type": "integer",
+                        "title": "Szkola Id"
+                    },
+                    "przedmiot_id": {
+                        "type": "integer",
+                        "title": "Przedmiot Id"
+                    },
+                    "rok": {
+                        "type": "integer",
+                        "title": "Rok"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "przedmiot": {
+                        "$ref": "#/components/schemas/PrzedmiotPublic"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "liczba_zdajacych",
+                    "wynik_sredni",
+                    "szkola_id",
+                    "przedmiot_id",
+                    "rok",
+                    "id",
+                    "przedmiot"
+                ],
+                "title": "WynikE8PublicWithPrzedmiot"
+            },
+            "WynikEMPublicWithPrzedmiot": {
+                "properties": {
+                    "liczba_zdajacych": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Liczba Zdajacych"
+                    },
+                    "mediana": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Mediana"
+                    },
+                    "sredni_wynik": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Sredni Wynik"
+                    },
+                    "zdawalnosc": {
+                        "anyOf": [
+                            {
+                                "type": "number"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Zdawalnosc"
+                    },
+                    "liczba_laureatow_finalistow": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Liczba Laureatow Finalistow"
+                    },
+                    "szkola_id": {
+                        "type": "integer",
+                        "title": "Szkola Id"
+                    },
+                    "przedmiot_id": {
+                        "type": "integer",
+                        "title": "Przedmiot Id"
+                    },
+                    "rok": {
+                        "type": "integer",
+                        "title": "Rok"
+                    },
+                    "id": {
+                        "type": "integer",
+                        "title": "Id"
+                    },
+                    "przedmiot": {
+                        "$ref": "#/components/schemas/PrzedmiotPublic"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "liczba_zdajacych",
+                    "sredni_wynik",
+                    "szkola_id",
+                    "przedmiot_id",
+                    "rok",
+                    "id",
+                    "przedmiot"
+                ],
+                "title": "WynikEMPublicWithPrzedmiot"
+            }
+        }
+    }
+}

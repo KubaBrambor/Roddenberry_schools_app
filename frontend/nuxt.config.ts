@@ -1,5 +1,5 @@
-import tailwindcss from "@tailwindcss/vite";
-import { defineNuxtConfig } from "nuxt/config";
+import tailwindcss from "@tailwindcss/vite"
+import { defineNuxtConfig } from "nuxt/config"
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: "2025-08-23",
@@ -14,9 +14,13 @@ export default defineNuxtConfig({
 
     // Add tailwind as Vite plugin
     css: ["~/assets/css/main.css"],
+    icon: {
+        mode: "css",
+        cssLayer: "base",
+    },
     vite: {
         plugins: [tailwindcss()],
     },
 
-    modules: ["@nuxt/eslint"],
-});
+    modules: ["@nuxt/eslint", "nuxt-maplibre", "@nuxt/icon"],
+})

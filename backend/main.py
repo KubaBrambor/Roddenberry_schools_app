@@ -2,12 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.models  # to ensure that all model classes are known to SQLAlchemy before any routes are accessed
-from app.routers import schools
+from app.routers import school_types, schools
 
 # Create FastAPI app with root path
 app = FastAPI()
 
 app.include_router(schools.router)
+app.include_router(school_types.router)
 
 # List of allowed origins
 origins = [

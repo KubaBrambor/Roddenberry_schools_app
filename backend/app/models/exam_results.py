@@ -16,6 +16,10 @@ class Przedmiot(PrzedmiotBase, table=True):
     wyniki_em: list["WynikEM"] = Relationship(back_populates="przedmiot")  # pyright: ignore[reportAny]
 
 
+class PrzedmiotPublic(PrzedmiotBase):
+    id: int
+
+
 # Columns that default to None don't always exist in excel files
 class WynikBase(SQLModel):
     liczba_zdajacych: int | None
@@ -54,6 +58,14 @@ class WynikE8(WynikE8Extra, WynikCommon, table=True):
     szkola: "Szkola" = Relationship(back_populates="wyniki_e8")  # pyright: ignore[reportAny]
 
 
+class WynikE8Public(WynikCommon, WynikE8Extra):
+    id: int
+
+
+class WynikE8PublicWithPrzedmiot(WynikE8Public):
+    przedmiot: PrzedmiotPublic
+
+
 class WynikEM(WynikEMExtra, WynikCommon, table=True):
     __tablename__: str = "wynik_em"  # pyright: ignore[reportIncompatibleVariableOverride]
     __table_args__: tuple[UniqueConstraint] = (
@@ -68,3 +80,11 @@ class WynikEM(WynikEMExtra, WynikCommon, table=True):
     liczba_zdajacych: int  # pyright: ignore[reportIncompatibleVariableOverride]
     przedmiot: Przedmiot = Relationship(back_populates="wyniki_em")  # pyright: ignore[reportAny]
     szkola: "Szkola" = Relationship(back_populates="wyniki_em")  # pyright: ignore[reportAny]
+
+
+class WynikEMPublic(WynikCommon, WynikEMExtra):
+    id: int
+
+
+class WynikEMPublicWithPrzedmiot(WynikEMPublic):
+    przedmiot: PrzedmiotPublic
